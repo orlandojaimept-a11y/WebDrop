@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WebDrop — Sua loja online em segundos</title>
+<meta name="description" content="Suba um arquivo HTML e tenha sua vitrine de vendas publicada imediatamente. Sem código. Sem servidor.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --white:#ffffff;
+  --bg:#f9f9f7;
+  --bg2:#f2f2ee;
+  --surface:#ffffff;
+  --border:#e4e4de;
+  --border2:#d0d0c8;
+  --txt:#111110;
+  --txt2:#5a5a55;
+  --txt3:#9a9a92;
+  --txt4:#c8c8c0;
+  --accent:#0047ff;
+  --accent-bg:#eef2ff;
+  --accent-border:#c7d4ff;
+  --ton:#0098ea;
+  --ton-bg:#e6f5fd;
+  --ton-border:#b3dff7;
+  --green:#00875a;
+  --green-bg:#e6f6f0;
+  --green-border:#b3e0ce;
+  --red:#d32f2f;
+  --red-bg:#fdecea;
+  --red-border:#f5c6c6;
+  --amber:#b45309;
+  --amber-bg:#fef3e2;
+  --amber-border:#fcd89a;
+  --r:14px;--r2:10px;--r3:6px;
+  --t:160ms cubic-bezier(.4,0,.2,1);
+  --sh:0 1px 2px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.06);
+  --sh-md:0 2px 8px rgba(0,0,0,.08),0 8px 32px rgba(0,0,0,.08);
+}
+html,body{min-height:100%;background:var(--bg);color:var(--txt);
+  font-family:'Bricolage Grotesque',sans-serif;font-size:14px;
+  -webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden}
+input,select,textarea,button{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer;border:none;background:none}
+a{color:inherit;text-decoration:none}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes appear{from{opacity:0;transform:scale(.97) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+.page{animation:fadeUp .3s ease both;max-width:840px;margin:0 auto;padding:40px 20px 100px}
+.page-wide{animation:fadeUp .3s ease both;max-width:1100px;margin:0 auto;padding:40px 20px 100px}
+#app{min-height:calc(100vh - 60px)}
+
+/* Nav */
+.bar{position:sticky;top:0;z-index:200;display:flex;align-items:center;
+  justify-content:space-between;height:60px;padding:0 24px;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{font-weight:800;font-size:18px;letter-spacing:-.5px;color:var(--txt);
+  display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+.logo-mark{width:28px;height:28px;background:var(--accent);border-radius:8px;
+  display:inline-flex;align-items:center;justify-content:center;font-size:13px;color:#fff;font-weight:700}
+.bar-links{display:flex;align-items:center;gap:6px}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  padding:9px 18px;border-radius:var(--r2);font-size:13px;font-weight:600;
+  transition:all var(--t);white-space:nowrap;line-height:1;cursor:pointer}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(0,71,255,.25)}
+.btn-primary:hover{background:#0040e0;box-shadow:0 4px 16px rgba(0,71,255,.35);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--txt2);border:1px solid var(--border2)}
+.btn-ghost:hover{background:var(--bg2);color:var(--txt)}
+.btn-ton{background:var(--ton);color:#fff}
+.btn-ton:hover{background:#0088d4;transform:translateY(-1px)}
+.btn-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.btn-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.btn-sm{padding:6px 14px;font-size:12px}
+.btn-xs{padding:4px 10px;font-size:11px;border-radius:var(--r3)}
+.btn-lg{padding:13px 28px;font-size:15px;border-radius:var(--r)}
+.btn:disabled{opacity:.4;pointer-events:none}
+.btn-icon{width:34px;height:34px;padding:0;border-radius:var(--r3)}
+
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:28px;box-shadow:var(--sh)}
+.card-sm{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px 18px}
+.card-stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px 24px;box-shadow:var(--sh)}
+.card-hover{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px;box-shadow:var(--sh);transition:all .2s}
+.card-hover:hover{box-shadow:var(--sh-md);border-color:var(--border2);transform:translateY(-1px)}
+
+/* Form */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.label{font-size:11px;font-weight:700;color:var(--txt3);letter-spacing:.06em;text-transform:uppercase;font-family:'DM Mono',monospace}
+.input{width:100%;padding:10px 14px;background:var(--bg);border:1.5px solid var(--border2);
+  border-radius:var(--r2);outline:none;transition:all var(--t);color:var(--txt);font-size:14px}
+.input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,71,255,.1);background:var(--white)}
+.input::placeholder{color:var(--txt4)}
+.input:disabled{opacity:.5;cursor:not-allowed}
+
+/* Badges */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:700}
+.badge-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.badge-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.badge-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.badge-blue{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border)}
+.badge-ton{background:var(--ton-bg);color:var(--ton);border:1px solid var(--ton-border)}
+.badge-grey{background:var(--bg2);color:var(--txt3);border:1px solid var(--border)}
+
+/* Alerts */
+.alert{padding:12px 16px;border-radius:var(--r2);font-size:13px;margin-bottom:18px;display:flex;align-items:flex-start;gap:10px}
+.alert-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.alert-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.alert-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.alert-blue{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border)}
+
+/* Table */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;font-size:10px;font-weight:700;color:var(--txt3);letter-spacing:.08em;
+  text-transform:uppercase;padding:10px 14px;border-bottom:1.5px solid var(--border);font-family:'DM Mono',monospace}
+.tbl td{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tbody tr:hover td{background:var(--bg2)}
+.tbl-wrap{border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--surface)}
+
+/* Site cards */
+.site-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+  padding:20px 24px;display:flex;align-items:center;justify-content:space-between;
+  gap:16px;flex-wrap:wrap;transition:all .2s;position:relative;overflow:hidden;box-shadow:var(--sh)}
+.site-card:hover{border-color:var(--border2);box-shadow:var(--sh-md)}
+.site-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--accent)}
+.site-card-info{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}
+.site-card-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+/* Drop zone */
+.drop-zone{border:2px dashed var(--border2);border-radius:var(--r);padding:40px 24px;
+  text-align:center;cursor:pointer;transition:all .2s;background:var(--bg)}
+.drop-zone:hover,.drop-zone.drag-over{border-color:var(--accent);background:var(--accent-bg)}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);
+  backdrop-filter:blur(4px);z-index:500;align-items:center;justify-content:center;padding:16px}
+.modal-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+  width:100%;max-width:920px;max-height:92vh;display:flex;flex-direction:column;
+  overflow:hidden;box-shadow:var(--sh-md);animation:appear .2s ease}
+.modal-head{display:flex;align-items:center;justify-content:space-between;
+  padding:16px 22px;border-bottom:1px solid var(--border)}
+.modal-body{flex:1;overflow:auto;position:relative}
+.modal-body iframe{width:100%;height:100%;border:none;min-height:520px}
+.modal-foot{padding:14px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
+
+/* Subdomain input */
+.sub-wrap{display:flex;align-items:center;border:1.5px solid var(--border2);border-radius:var(--r2);
+  overflow:hidden;transition:all var(--t);background:var(--bg)}
+.sub-wrap:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,71,255,.1);background:var(--white)}
+.sub-input{border:none!important;box-shadow:none!important;flex:1;border-radius:0!important;background:transparent}
+.sub-tld{padding:10px 14px;background:var(--bg2);color:var(--txt3);white-space:nowrap;
+  font-size:12px;border-left:1px solid var(--border);font-family:'DM Mono',monospace}
+.sub-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin:0 10px;transition:all .3s}
+.sub-dot.idle{background:var(--txt4)}
+.sub-dot.checking{background:var(--amber);animation:pulse .8s ease infinite}
+.sub-dot.ok{background:var(--green)}
+.sub-dot.taken{background:var(--red)}
+
+/* Admin */
+.admin-layout{display:flex;min-height:calc(100vh - 60px)}
+.admin-sidebar{width:220px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);padding:20px 0}
+.admin-main{flex:1;padding:32px;overflow:auto;background:var(--bg)}
+.admin-nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:13px;
+  color:var(--txt2);transition:all .15s;cursor:pointer;width:100%;text-align:left;font-weight:500}
+.admin-nav-item:hover{background:var(--bg2);color:var(--txt)}
+.admin-nav-item.active{background:var(--accent-bg);color:var(--accent);border-right:2px solid var(--accent)}
+.admin-nav-section{font-size:10px;font-weight:700;color:var(--txt4);letter-spacing:.1em;
+  text-transform:uppercase;padding:16px 20px 6px;font-family:'DM Mono',monospace}
+
+/* Toast */
+#toast-container{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);
+  padding:12px 18px;font-size:13px;max-width:340px;display:flex;align-items:center;
+  gap:10px;box-shadow:var(--sh-md);animation:appear .2s ease;font-weight:500}
+.toast-success{border-color:var(--green-border);background:var(--green-bg);color:var(--green)}
+.toast-error{border-color:var(--red-border);background:var(--red-bg);color:var(--red)}
+.toast-amber{border-color:var(--amber-border);background:var(--amber-bg);color:var(--amber)}
+
+/* Util */
+.div{border:none;border-top:1px solid var(--border);margin:24px 0}
+.txt2{color:var(--txt2)}.txt3{color:var(--txt3)}
+h1{font-weight:800;font-size:26px;letter-spacing:-.5px}
+h2{font-weight:700;font-size:18px;letter-spacing:-.3px}
+h3{font-weight:600;font-size:15px}
+.mono{font-family:'DM Mono',monospace;font-size:12px}
+.gap{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.between{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.col{display:flex;flex-direction:column;gap:12px}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
+.mt4{margin-top:4px}.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}
+.mt24{margin-top:24px}.mt32{margin-top:32px}.mt48{margin-top:48px}.mt64{margin-top:64px}
+.spinner{width:16px;height:16px;border:2px solid var(--border2);border-top-color:var(--accent);
+  border-radius:50%;animation:spin .7s linear infinite;display:inline-block;flex-shrink:0}
+.stat-num{font-weight:800;font-size:30px;letter-spacing:-.5px}
+.stat-label{font-size:11px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;
+  font-family:'DM Mono',monospace;margin-top:2px}
+.trial-bar{background:var(--border);border-radius:99px;height:8px;overflow:hidden}
+.trial-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--ton));border-radius:99px;transition:width .5s}
+.ref-box{background:linear-gradient(135deg,var(--accent-bg),var(--ton-bg));
+  border:1px solid var(--accent-border);border-radius:var(--r);padding:20px 24px}
+.ref-link{display:flex;align-items:center;gap:8px;background:var(--white);
+  border:1px solid var(--border2);border-radius:var(--r2);padding:10px 14px;
+  font-family:'DM Mono',monospace;font-size:12px;color:var(--txt2)}
+.pay-qr{display:flex;flex-direction:column;align-items:center;gap:12px;
+  background:var(--ton-bg);border:1px solid var(--ton-border);border-radius:var(--r);padding:20px}
+</style>
+</head>
+<body>
+<div id="toast-container"></div>
+<nav class="bar">
+  <div class="logo" onclick="APP.nav('/')">
+    <div class="logo-mark">W</div>WebDrop
+  </div>
+  <div class="bar-links" id="nav-links"></div>
+</nav>
+<div id="app"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  WEBDROP — Frontend SPA
+//  Comunicação 100% via API REST (Render backend)
+// ═══════════════════════════════════════════════════════════════
+
+const API      = 'https://webdrop-server.onrender.com';  // ← altere se necessário
+const DOMAIN   = '.webdrop.app';
+const MAX_SITES = 3;
+const TRIAL_DAYS = 7;
+const REF_DAYS   = 7;
+
+// ── Estado global ─────────────────────────────────────────────
+let STATE = { user: null, sites: [] };
+
+// ── API helper ────────────────────────────────────────────────
+async function api(method, path, body, isFormData=false) {
+  const opts = {
+    method,
+    credentials: 'include',
+    headers: isFormData ? {} : { 'Content-Type': 'application/json' },
+    body: body
+      ? (isFormData ? body : JSON.stringify(body))
+      : undefined,
+  };
+  const res  = await fetch(API + path, opts);
+  const data = await res.json();
+  if (!res.ok && !data.ok) throw new Error(data.error || 'Erro desconhecido');
+  return data;
+}
+
+// ── Formatters ────────────────────────────────────────────────
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmtSize(b){ if(!b)return'0 B'; if(b<1024)return b+' B'; if(b<1048576)return(b/1024).toFixed(1)+' KB'; return(b/1048576).toFixed(2)+' MB'; }
+function fmtDate(ts){ if(!ts)return'—'; return new Intl.DateTimeFormat('pt-BR',{day:'2-digit',month:'short',year:'numeric'}).format(new Date(ts)); }
+
+// ── Router ────────────────────────────────────────────────────
+const APP = {
+  nav(path) { history.pushState({}, '', path || '/'); this.render(); },
+  async render() {
+    const app      = document.getElementById('app');
+    const url      = new URL(location.href);
+    const pathname = url.pathname;
+    const params   = url.searchParams;
+
+    app.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:300px"><div class="spinner" style="width:28px;height:28px;border-width:3px"></div></div>';
+
+    // Carrega sessão
+    try {
+      const data = await api('GET', '/api/auth/me');
+      STATE.user  = data.user;
+      STATE.sites = data.sites;
+    } catch {
+      STATE.user  = null;
+      STATE.sites = [];
+    }
+
+    renderNav();
+
+    try {
+      if      (pathname === '/')                     app.innerHTML = renderHome();
+      else if (pathname === '/register')             app.innerHTML = renderRegister(params.get('ref')||'');
+      else if (pathname === '/login')                app.innerHTML = renderLogin();
+      else if (pathname === '/dashboard')            await renderDashboard(app, params);
+      else if (pathname === '/affiliates')           await renderAffiliates(app);
+      else if (pathname === '/settings')             await renderSettings(app, params);
+      else if (pathname === '/admin')                app.innerHTML = renderAdminLogin();
+      else if (pathname === '/admin/dashboard')      await renderAdminDash(app, params);
+      else                                           app.innerHTML = render404();
+    } catch(e) {
+      app.innerHTML = `<div class="page" style="text-align:center;padding-top:60px">
+        <div class="alert alert-red" style="display:inline-flex">Erro: ${escHtml(e.message)}</div></div>`;
+    }
+  }
+};
+window.addEventListener('popstate', () => APP.render());
+
+function renderNav() {
+  const el = document.getElementById('nav-links');
+  if (STATE.user) {
+    el.innerHTML = `
+      <button class="btn btn-ghost btn-sm" onclick="APP.nav('/affiliates')">🔗 Afiliados</button>
+      <button class="btn btn-ghost btn-sm" onclick="APP.nav('/dashboard')">Dashboard</button>
+      <button class="btn btn-ghost btn-sm" onclick="doLogout()">Sair</button>`;
+  } else {
+    el.innerHTML = `
+      <button class="btn btn-ghost btn-sm" onclick="APP.nav('/login')">Entrar</button>
+      <button class="btn btn-primary btn-sm" onclick="APP.nav('/register')">Começar grátis →</button>`;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  HOME
+// ═══════════════════════════════════════════════════════════════
+function renderHome() {
+  return `
+<div style="background:var(--white);border-bottom:1px solid var(--border)">
+  <div class="page" style="padding-top:80px;text-align:center;padding-bottom:80px">
+    <span class="badge badge-blue" style="margin-bottom:20px">✦ ${TRIAL_DAYS} dias grátis</span>
+    <h1 style="font-size:clamp(36px,6vw,64px);line-height:1.1;margin-bottom:16px;letter-spacing:-2px">
+      Sua vitrine online<br><span style="color:var(--accent)">no ar em segundos.</span>
+    </h1>
+    <p class="txt2" style="max-width:480px;margin:0 auto 36px;font-size:16px;line-height:1.7">
+      Suba um arquivo HTML e tenha seu site de vendas publicado imediatamente. Sem código extra. Sem servidor.
+    </p>
+    <div class="gap" style="justify-content:center;margin-bottom:16px">
+      <button class="btn btn-primary btn-lg" onclick="APP.nav('/register')">Publicar meu site grátis →</button>
+      ${STATE.user
+        ? `<button class="btn btn-ghost btn-lg" onclick="APP.nav('/dashboard')">Ir ao dashboard</button>`
+        : `<button class="btn btn-ghost btn-lg" onclick="APP.nav('/login')">Já tenho conta</button>`}
+    </div>
+    <p class="txt3" style="font-size:12px">Sem cartão agora · ${TRIAL_DAYS} dias grátis · Até ${MAX_SITES} sites</p>
+  </div>
+</div>
+
+<div style="background:var(--surface);border-bottom:1px solid var(--border);padding:20px">
+  <div style="max-width:840px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:20px;text-align:center">
+    <div><div style="font-weight:800;font-size:28px;color:var(--accent)">3</div><div class="txt3 mono" style="font-size:10px;margin-top:4px">SITES SIMULTÂNEOS</div></div>
+    <div><div style="font-weight:800;font-size:28px;color:var(--green)">${TRIAL_DAYS}</div><div class="txt3 mono" style="font-size:10px;margin-top:4px">DIAS GRÁTIS</div></div>
+    <div><div style="font-weight:800;font-size:28px;color:var(--ton)">1 TON</div><div class="txt3 mono" style="font-size:10px;margin-top:4px">POR MÊS</div></div>
+    <div><div style="font-weight:800;font-size:28px;color:var(--amber)">&lt;5s</div><div class="txt3 mono" style="font-size:10px;margin-top:4px">PARA PUBLICAR</div></div>
+  </div>
+</div>
+
+<div class="page" style="padding-top:64px">
+  <div style="text-align:center;margin-bottom:48px">
+    <h2 style="font-size:clamp(22px,4vw,32px)">Como funciona</h2>
+  </div>
+  <div class="grid-3">
+    ${[['1','Crie sua conta','Cadastre-se, escolha seu subdomínio e ganhe 7 dias grátis.','accent'],
+       ['2','Suba seu HTML','Arraste o arquivo da sua página. Publicado em segundos.','ton'],
+       ['3','Compartilhe','Seu link fica no ar 24/7. Receba pedidos.','green']
+      ].map(([n,t,d,c])=>`
+    <div class="card-hover">
+      <div style="width:40px;height:40px;background:var(--${c}-bg);border:1px solid var(--${c}-border);
+        border-radius:var(--r2);display:flex;align-items:center;justify-content:center;
+        font-weight:800;font-size:16px;color:var(--${c});margin-bottom:16px">${n}</div>
+      <h3 style="margin-bottom:8px">${t}</h3>
+      <p class="txt3" style="font-size:13px;line-height:1.6">${d}</p>
+    </div>`).join('')}
+  </div>
+</div>
+
+<div style="background:var(--accent-bg);border-top:1px solid var(--accent-border);border-bottom:1px solid var(--accent-border);padding:48px 20px">
+  <div style="max-width:600px;margin:0 auto;text-align:center">
+    <span class="badge badge-blue" style="margin-bottom:16px">🔗 Afiliados</span>
+    <h2 style="font-size:clamp(20px,3vw,28px);margin-bottom:12px">Convide e ganhe dias grátis</h2>
+    <p class="txt2" style="font-size:14px;line-height:1.7;margin-bottom:24px">
+      Cada amigo que <strong>pagar</strong> o primeiro mês te dá <strong>+${REF_DAYS} dias</strong>. Seu amigo também ganha ${TRIAL_DAYS} dias grátis.
+    </p>
+    <div class="grid-2" style="text-align:left;max-width:480px;margin:0 auto">
+      <div class="card" style="padding:16px 20px"><div style="font-size:24px;margin-bottom:8px">🎁</div><h3 style="font-size:13px;margin-bottom:4px">Você ganha</h3><p class="txt2" style="font-size:12px">+${REF_DAYS} dias por indicado que pagar</p></div>
+      <div class="card" style="padding:16px 20px"><div style="font-size:24px;margin-bottom:8px">👤</div><h3 style="font-size:13px;margin-bottom:4px">Seu indicado ganha</h3><p class="txt2" style="font-size:12px">${TRIAL_DAYS} dias grátis para testar</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="page" style="padding-top:64px">
+  <div style="text-align:center;margin-bottom:40px">
+    <h2 style="font-size:clamp(22px,4vw,32px)">Um plano. Sem surpresas.</h2>
+  </div>
+  <div style="max-width:380px;margin:0 auto">
+    <div class="card" style="border-color:var(--accent-border);position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)"></div>
+      <div style="font-weight:800;font-size:48px;letter-spacing:-2px;line-height:1;color:var(--ton)">
+        1 <span style="font-size:20px;font-weight:600;color:var(--txt3)">TON</span>
+      </div>
+      <div class="txt3" style="font-size:13px;margin-bottom:24px">por mês via NowPayments</div>
+      <div class="div" style="margin:16px 0"></div>
+      ${['Até 3 sites simultâneos','Subdomínio exclusivo','Upload HTML ilimitado','SSL automático','Suporte por e-mail'].map(f=>`
+      <div style="display:flex;gap:10px;padding:6px 0;font-size:13px;color:var(--txt2)">
+        <span style="color:var(--green);font-weight:700">✓</span>${f}
+      </div>`).join('')}
+      <button class="btn btn-primary" style="width:100%;margin-top:24px" onclick="APP.nav('/register')">
+        Começar com ${TRIAL_DAYS} dias grátis →
+      </button>
+    </div>
+  </div>
+</div>
+
+<div style="border-top:1px solid var(--border);padding:32px 20px;text-align:center;background:var(--surface)">
+  <div class="logo" style="justify-content:center;margin-bottom:12px;cursor:default"><div class="logo-mark">W</div>WebDrop</div>
+  <p class="txt3" style="font-size:12px">Sua vitrine online em segundos · Pagamento via TON Blockchain</p>
+</div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  REGISTER
+// ═══════════════════════════════════════════════════════════════
+function renderRegister(ref='') {
+  return `
+<div class="page" style="max-width:480px">
+  <div class="mt32">
+    <h1>Criar conta</h1>
+    <p class="txt2 mt8">${TRIAL_DAYS} dias grátis. Sem cartão agora.</p>
+  </div>
+  ${ref ? `<div class="alert alert-blue mt16">🔗 Você foi convidado! Seus ${TRIAL_DAYS} dias grátis já estão garantidos.</div>` : ''}
+  <div class="card mt24">
+    <div class="field">
+      <label class="label">Nome completo</label>
+      <input class="input" id="reg-name" placeholder="Seu nome" maxlength="60" autocomplete="name">
+    </div>
+    <div class="field">
+      <label class="label">E-mail</label>
+      <input class="input" type="email" id="reg-email" placeholder="voce@email.com" autocomplete="email">
+    </div>
+    <div class="field">
+      <label class="label">Subdomínio</label>
+      <div class="sub-wrap">
+        <div class="sub-dot idle" id="subDot"></div>
+        <input class="input sub-input" id="reg-sub" placeholder="minhaloja"
+          oninput="checkSub(this.value)" autocomplete="off" maxlength="30">
+        <div class="sub-tld">${DOMAIN}</div>
+      </div>
+      <span id="subMsg" class="txt3" style="font-size:11px;margin-top:4px">Letras minúsculas, números e hífens. Mín. 3 chars.</span>
+    </div>
+    <div class="field">
+      <label class="label">Senha</label>
+      <input class="input" type="password" id="reg-pw" placeholder="Mínimo 8 caracteres" minlength="8" autocomplete="new-password">
+    </div>
+    <div class="field">
+      <label class="label">Confirmar senha</label>
+      <input class="input" type="password" id="reg-pw2" autocomplete="new-password">
+    </div>
+    <button class="btn btn-primary" style="width:100%;margin-top:8px" id="regBtn" onclick="doRegister('${escHtml(ref)}')">
+      Criar conta grátis →
+    </button>
+    <p class="txt3 mt16" style="font-size:12px;text-align:center">
+      Já tem conta? <span style="color:var(--accent);cursor:pointer;font-weight:600" onclick="APP.nav('/login')">Entrar</span>
+    </p>
+  </div>
+</div>`;
+}
+
+let _subTimer = null;
+function checkSub(val) {
+  val = val.toLowerCase().replace(/[^a-z0-9-]/g,'');
+  document.getElementById('reg-sub').value = val;
+  const dot = document.getElementById('subDot');
+  const msg = document.getElementById('subMsg');
+  clearTimeout(_subTimer);
+  if (val.length < 3) { dot.className='sub-dot idle'; msg.textContent='Letras minúsculas, números e hífens. Mín. 3 chars.'; msg.style.color=''; return; }
+  dot.className = 'sub-dot checking'; msg.textContent = 'Verificando...'; msg.style.color = '';
+  _subTimer = setTimeout(async () => {
+    try {
+      // Verificação client-side simples; o server valida de verdade no register
+      const re = /^[a-z0-9][a-z0-9-]{1,28}[a-z0-9]$/;
+      if (!re.test(val)) { dot.className='sub-dot taken'; msg.textContent='✗ Formato inválido.'; msg.style.color='var(--red)'; return; }
+      dot.className = 'sub-dot ok';
+      msg.textContent = '✓ ' + val + DOMAIN;
+      msg.style.color = 'var(--green)';
+    } catch { dot.className='sub-dot idle'; }
+  }, 350);
+}
+
+async function doRegister(ref='') {
+  const btn  = document.getElementById('regBtn');
+  const name = (document.getElementById('reg-name').value || '').trim();
+  const email = (document.getElementById('reg-email').value || '').trim().toLowerCase();
+  const sub  = (document.getElementById('reg-sub').value || '').trim().toLowerCase();
+  const pw   = document.getElementById('reg-pw').value || '';
+  const pw2  = document.getElementById('reg-pw2').value || '';
+  if (!name||!email||!sub||!pw) { showToast('Preencha todos os campos.','error','⚠'); return; }
+  if (pw !== pw2) { showToast('As senhas não coincidem.','error','⚠'); return; }
+  if (pw.length < 8) { showToast('Senha mínimo 8 caracteres.','error','⚠'); return; }
+  btn.disabled = true; btn.textContent = 'Criando conta...';
+  try {
+    await api('POST', '/api/auth/register', { name, email, password: pw, subdomain: sub, ref: ref || undefined });
+    await APP.render();
+    APP.nav('/dashboard');
+  } catch(e) {
+    btn.disabled = false; btn.textContent = 'Criar conta grátis →';
+    showToast(e.message,'error','⚠');
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  LOGIN
+// ═══════════════════════════════════════════════════════════════
+function renderLogin() {
+  return `
+<div class="page" style="max-width:440px">
+  <div class="mt32"><h1>Entrar</h1><p class="txt2 mt8">Bem-vindo de volta.</p></div>
+  <div class="card mt24">
+    <div class="field">
+      <label class="label">E-mail</label>
+      <input class="input" type="email" id="log-email" placeholder="voce@email.com" autocomplete="email">
+    </div>
+    <div class="field">
+      <label class="label">Senha</label>
+      <input class="input" type="password" id="log-pw" autocomplete="current-password"
+        onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="btn btn-primary" style="width:100%;margin-top:8px" id="logBtn" onclick="doLogin()">Entrar →</button>
+    <p class="txt3 mt16" style="font-size:12px;text-align:center">
+      Não tem conta? <span style="color:var(--accent);cursor:pointer;font-weight:600" onclick="APP.nav('/register')">Criar conta grátis</span>
+    </p>
+  </div>
+</div>`;
+}
+async function doLogin() {
+  const btn   = document.getElementById('logBtn');
+  const email = (document.getElementById('log-email').value || '').trim().toLowerCase();
+  const pw    = document.getElementById('log-pw').value || '';
+  if (!email||!pw) { showToast('Preencha e-mail e senha.','error','⚠'); return; }
+  btn.disabled = true; btn.textContent = 'Entrando...';
+  try {
+    await api('POST', '/api/auth/login', { email, password: pw });
+    await APP.render();
+    APP.nav('/dashboard');
+  } catch(e) {
+    btn.disabled = false; btn.textContent = 'Entrar →';
+    showToast(e.message,'error','⚠');
+  }
+}
+async function doLogout() {
+  try { await api('POST', '/api/auth/logout'); } catch {}
+  STATE.user = null; STATE.sites = [];
+  APP.nav('/');
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  DASHBOARD
+// ═══════════════════════════════════════════════════════════════
+async function renderDashboard(app, params) {
+  if (!STATE.user) { APP.nav('/login'); return; }
+  const { user, sites } = STATE;
+  const liveSites  = sites.filter(s => s.is_live).length;
+  const totalSize  = sites.reduce((a,s) => a+(s.file_size||0), 0);
+  const active     = user.active;
+  const days       = user.days_left || 0;
+
+  const siteCards = sites.map(s => {
+    const isLive  = s.is_live;
+    const hasDraft = s.has_draft;
+    const statusBadge = isLive
+      ? '<span class="badge badge-green">● Live</span>'
+      : hasDraft
+        ? '<span class="badge badge-blue">◎ Rascunho</span>'
+        : '<span class="badge badge-grey">○ Vazio</span>';
+
+    const uploadBtn = active
+      ? `<label class="btn btn-ghost btn-sm" style="cursor:pointer">
+           📁 Upload
+           <input type="file" accept=".html,.htm" style="display:none" onchange="handleUpload(${s.slot},this)">
+         </label>` : '';
+    const previewBtn  = hasDraft ? `<button class="btn btn-ghost btn-sm" onclick="openPreview(${s.slot})">👁 Preview</button>` : '';
+    const publishBtn  = (hasDraft && active) ? `<button class="btn btn-green btn-sm" onclick="doPublish(${s.slot})">🚀 Publicar</button>` : '';
+    const viewBtn     = isLive ? `<button class="btn btn-ghost btn-sm" onclick="viewSite(${s.slot})">🔗 Ver site</button>` : '';
+    const deleteBtn   = (isLive||hasDraft) ? `<button class="btn btn-red btn-sm btn-icon" onclick="doDelete(${s.slot})">🗑</button>` : '';
+    const renameBtn   = `<button class="btn btn-ghost btn-sm btn-icon" title="Renomear" onclick="doRename(${s.slot})">✏️</button>`;
+
+    return `
+    <div class="site-card" id="site-card-${s.slot}">
+      <div class="site-card-info">
+        <div class="gap">
+          <strong style="font-size:15px">${s.slot}. ${escHtml(s.title||'Site '+s.slot)}</strong>
+          ${statusBadge}
+        </div>
+        <div class="gap mt4">
+          ${s.file_size ? `<span class="txt3 mono" style="font-size:11px">${fmtSize(s.file_size)}</span>` : ''}
+          ${s.published_at ? `<span class="txt3 mono" style="font-size:11px">· ${fmtDate(s.published_at)}</span>` : ''}
+        </div>
+      </div>
+      <div class="site-card-actions">
+        ${!active && !isLive ? `<span class="txt3" style="font-size:12px">Ative o plano para publicar</span>` : ''}
+        ${uploadBtn}${previewBtn}${publishBtn}${viewBtn}${deleteBtn}${renameBtn}
+      </div>
+    </div>`;
+  }).join('');
+
+  app.innerHTML = `
+<div class="page-wide">
+  <div class="between mt8">
+    <div>
+      <h1>Dashboard</h1>
+      <div class="gap mt4">
+        <span class="txt2" style="font-size:13px">${escHtml(user.name)}</span>
+        <span class="txt4">·</span>
+        <span class="txt3 mono" style="font-size:11px">${escHtml(user.email)}</span>
+        ${active
+          ? `<span class="badge badge-green">✓ Ativo · ${days} dias restantes</span>`
+          : `<span class="badge badge-red">⚠ Expirado</span>`}
+      </div>
+    </div>
+    <div class="gap">
+      <button class="btn btn-ghost btn-sm" onclick="APP.nav('/affiliates')">🔗 Afiliados</button>
+      <button class="btn btn-ghost btn-sm" onclick="APP.nav('/settings')">⚙ Config</button>
+      <button class="btn btn-ghost btn-sm" onclick="doLogout()">Sair</button>
+    </div>
+  </div>
+
+  ${active ? `
+  <div class="card-sm mt16" style="background:var(--accent-bg);border-color:var(--accent-border)">
+    <div class="between" style="margin-bottom:8px">
+      <span style="font-size:13px;font-weight:600;color:var(--accent)">Acesso ativo</span>
+      <span class="mono txt2" style="font-size:12px">${days} dias restantes</span>
+    </div>
+    <div class="trial-bar"><div class="trial-fill" style="width:${Math.min(100,Math.round(days/30*100))}%"></div></div>
+  </div>` : `
+  <div class="card mt16" style="border-color:var(--ton-border);background:var(--ton-bg);text-align:center;padding:24px">
+    <div style="font-size:32px;margin-bottom:12px">⏰</div>
+    <h2 style="color:var(--ton);margin-bottom:8px">Período gratuito expirado</h2>
+    <p class="txt2" style="font-size:13px;margin-bottom:20px">Assine por 1 TON/mês para continuar publicando.</p>
+    <button class="btn btn-ton" onclick="openPayModal()">💎 Assinar — 1 TON/mês</button>
+  </div>`}
+
+  <div class="grid-4 mt24">
+    <div class="card-stat"><div class="stat-num">${liveSites}</div><div class="stat-label">Sites Online</div></div>
+    <div class="card-stat"><div class="stat-num" style="font-size:22px">${fmtSize(totalSize)}</div><div class="stat-label">Storage Usado</div></div>
+    <div class="card-stat"><div class="stat-num" style="color:var(--accent)">${user.ref_earned||0}</div><div class="stat-label">Refs Convertidas</div></div>
+    <div class="card-stat"><div class="stat-num" style="font-size:16px;word-break:break-all">${escHtml(user.subdomain)}</div><div class="stat-label">Subdomínio</div></div>
+  </div>
+
+  <div class="card-sm mt16" style="display:flex;align-items:center;gap:14px">
+    <div style="width:36px;height:36px;background:var(--green-bg);border:1px solid var(--green-border);border-radius:var(--r2);display:flex;align-items:center;justify-content:center;font-size:16px">✓</div>
+    <div style="flex:1;min-width:0">
+      <div class="gap"><span style="font-size:13px;font-weight:600">Seu domínio</span><span class="badge badge-green" style="font-size:10px">● Ativo</span></div>
+      <span class="mono txt3" style="font-size:12px">https://${escHtml(user.subdomain)}${DOMAIN}</span>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText('https://${escHtml(user.subdomain)}${DOMAIN}').then(()=>showToast('Link copiado!','success','✓'))">Copiar</button>
+  </div>
+
+  <div class="between mt32">
+    <h2>Seus Sites</h2>
+    <span class="txt3 mono" style="font-size:11px">${liveSites} de ${MAX_SITES} publicados</span>
+  </div>
+  <div class="col mt16">${siteCards}</div>
+
+  ${!active ? `
+  <div class="ref-box mt24">
+    <div class="between">
+      <div>
+        <h3 style="margin-bottom:4px">💡 Convide amigos e ganhe mais dias!</h3>
+        <p class="txt2" style="font-size:13px">Cada amigo que pagar te dá +${REF_DAYS} dias.</p>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="APP.nav('/affiliates')">Ver meu link →</button>
+    </div>
+  </div>` : ''}
+</div>
+
+<!-- MODAL PREVIEW -->
+<div class="modal-overlay" id="previewModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="gap"><span>👁</span><h3>Pré-visualização</h3><span class="badge badge-amber" style="font-size:10px">SANDBOX</span></div>
+      <button onclick="closePreview()" class="btn btn-ghost btn-sm">✕ Fechar</button>
+    </div>
+    <div class="modal-body">
+      <iframe id="previewFrame" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closePreview()">Cancelar</button>
+      <button class="btn btn-primary" id="previewPublishBtn">🚀 Publicar agora</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PAGAMENTO -->
+<div class="modal-overlay" id="payModal">
+  <div class="modal-box" style="max-width:480px">
+    <div class="modal-head">
+      <div class="gap"><span>💎</span><h3>Assinar WebDrop</h3></div>
+      <button onclick="closePayModal()" class="btn btn-ghost btn-sm">✕</button>
+    </div>
+    <div class="modal-body" style="padding:24px" id="payModalContent">
+      <p class="txt2" style="font-size:13px;margin-bottom:20px">1 TON por mês · Até ${MAX_SITES} sites · Processado via NowPayments</p>
+      <button class="btn btn-ton" style="width:100%" id="payCreateBtn" onclick="createPayment()">💎 Gerar cobrança em TON →</button>
+    </div>
+  </div>
+</div>`;
+
+  window._previewSlot = null;
+}
+
+// Upload
+async function handleUpload(slot, input) {
+  if (!input.files || !input.files[0]) return;
+  const file = input.files[0];
+  if (file.size > 10*1024*1024) { showToast('Arquivo muito grande (máx 10MB)','error','✗'); return; }
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('slot', slot);
+  const btn = input.closest('label');
+  btn.style.opacity = '.5';
+  try {
+    await api('POST', '/api/sites/upload', fd, true);
+    showToast('Upload concluído! Clique em Preview.','success','✓');
+    await APP.render(); APP.nav('/dashboard');
+  } catch(e) {
+    btn.style.opacity = '1';
+    showToast(e.message,'error','✗');
+  }
+}
+
+// Preview
+function openPreview(slot) {
+  window._previewSlot = slot;
+  const overlay = document.getElementById('previewModal');
+  overlay.style.display = 'flex';
+  const frame = document.getElementById('previewFrame');
+  frame.src = `${API}/api/sites/${slot}/draft`;
+  document.getElementById('previewPublishBtn').onclick = () => { doPublish(slot); closePreview(); };
+}
+function closePreview() {
+  document.getElementById('previewModal').style.display = 'none';
+  document.getElementById('previewFrame').src = 'about:blank';
+  window._previewSlot = null;
+}
+
+// Publish
+async function doPublish(slot) {
+  try {
+    await api('POST', `/api/sites/${slot}/publish`);
+    showToast(`Site ${slot} publicado!`,'success','✓');
+    await APP.render(); APP.nav('/dashboard');
+  } catch(e) { showToast(e.message,'error','✗'); }
+}
+
+// Delete
+async function doDelete(slot) {
+  if (!confirm(`Apagar conteúdo do site ${slot}?`)) return;
+  try {
+    await api('DELETE', `/api/sites/${slot}`);
+    showToast('Site apagado.','amber','⚠');
+    await APP.render(); APP.nav('/dashboard');
+  } catch(e) { showToast(e.message,'error','✗'); }
+}
+
+// View live site
+function viewSite(slot) {
+  const base = `https://${STATE.user.subdomain}${DOMAIN}`;
+  window.open(slot === 1 ? base : `${base}/${slot}`, '_blank');
+}
+
+// Rename
+async function doRename(slot) {
+  const name = prompt('Novo nome para o site ' + slot + ':');
+  if (!name?.trim()) return;
+  try {
+    await api('PUT', `/api/sites/${slot}/rename`, { title: name.trim() });
+    showToast('Nome atualizado!','success','✓');
+    await APP.render(); APP.nav('/dashboard');
+  } catch(e) { showToast(e.message,'error','✗'); }
+}
+
+// Payment modal
+function openPayModal() { document.getElementById('payModal').style.display = 'flex'; }
+function closePayModal() { document.getElementById('payModal').style.display = 'none'; }
+
+let _pollInterval = null;
+async function createPayment() {
+  const btn = document.getElementById('payCreateBtn');
+  btn.disabled = true; btn.textContent = 'Gerando cobrança...';
+  try {
+    const data = await api('POST', '/api/payments/create');
+    const content = document.getElementById('payModalContent');
+    content.innerHTML = `
+      <div class="pay-qr">
+        <div style="font-size:13px;color:var(--ton);font-weight:600;margin-bottom:4px">Envie exatamente:</div>
+        <div style="font-size:32px;font-weight:800;color:var(--ton);letter-spacing:-1px">${data.pay_amount} TON</div>
+        <div style="font-size:11px;color:var(--txt3);margin-top:4px">rede TON</div>
+        <div class="ref-link" style="margin-top:12px;width:100%;word-break:break-all">
+          <span style="flex:1;font-size:11px">${escHtml(data.pay_address||'—')}</span>
+          <button class="btn btn-ton btn-xs" onclick="navigator.clipboard.writeText('${escHtml(data.pay_address||'')}').then(()=>showToast('Endereço copiado!','success','✓'))">Copiar</button>
+        </div>
+        ${data.invoice_url ? `<a href="${escHtml(data.invoice_url)}" target="_blank" class="btn btn-ghost btn-sm" style="margin-top:8px">Abrir página de pagamento →</a>` : ''}
+      </div>
+      <div class="alert alert-blue mt16">
+        <span>ℹ</span>
+        <span>Após enviar, aguarde a confirmação na blockchain. Pode levar 1–5 minutos. Esta tela verifica automaticamente.</span>
+      </div>
+      <div id="payStatus" class="txt3" style="font-size:12px;text-align:center;margin-top:12px">
+        <div class="spinner" style="margin:0 auto 8px"></div>Aguardando pagamento...
+      </div>`;
+
+    // Polling de status
+    if (_pollInterval) clearInterval(_pollInterval);
+    _pollInterval = setInterval(async () => {
+      try {
+        const s = await api('GET', `/api/payments/check?payment_id=${data.payment_id}`);
+        const el = document.getElementById('payStatus');
+        if (s.status === 'finished' || s.status === 'confirmed') {
+          clearInterval(_pollInterval);
+          if (el) el.innerHTML = '<span style="color:var(--green);font-weight:600">✓ Pagamento confirmado! Atualizando...</span>';
+          setTimeout(() => { closePayModal(); APP.render(); APP.nav('/dashboard'); }, 2000);
+        } else if (s.status === 'failed' || s.status === 'expired') {
+          clearInterval(_pollInterval);
+          if (el) el.innerHTML = '<span style="color:var(--red)">✗ Pagamento ' + s.status + '. Tente novamente.</span>';
+        }
+      } catch {}
+    }, 10000);
+
+  } catch(e) {
+    btn.disabled = false; btn.textContent = '💎 Gerar cobrança em TON →';
+    showToast(e.message,'error','✗');
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  AFFILIATES
+// ═══════════════════════════════════════════════════════════════
+async function renderAffiliates(app) {
+  if (!STATE.user) { APP.nav('/login'); return; }
+  let data;
+  try { data = await api('GET', '/api/affiliates'); }
+  catch(e) { app.innerHTML = `<div class="page"><div class="alert alert-red">${escHtml(e.message)}</div></div>`; return; }
+
+  const refLink = `${location.origin}/register?ref=${data.ref_code}`;
+
+  app.innerHTML = `
+<div class="page" style="max-width:680px">
+  <div class="mt8"><h1>Afiliados</h1><p class="txt2 mt8">Convide amigos. Ganhe dias grátis.</p></div>
+
+  <div class="grid-2 mt24">
+    <div class="card" style="padding:20px">
+      <div style="font-size:28px;margin-bottom:12px">🎁</div><h3>Você ganha</h3>
+      <p class="txt3 mt8" style="font-size:13px"><strong style="color:var(--accent);font-size:20px">+${REF_DAYS} dias</strong><br>por indicado que pagar o 1º mês</p>
+    </div>
+    <div class="card" style="padding:20px">
+      <div style="font-size:28px;margin-bottom:12px">👤</div><h3>Seu indicado ganha</h3>
+      <p class="txt3 mt8" style="font-size:13px"><strong style="color:var(--ton);font-size:20px">${TRIAL_DAYS} dias</strong><br>grátis para testar</p>
+    </div>
+  </div>
+
+  <div class="ref-box mt24">
+    <h3 style="margin-bottom:4px">🔗 Seu link de indicação</h3>
+    <p class="txt2" style="font-size:13px;margin-bottom:12px">Bônus creditado quando o indicado pagar o 1º mês.</p>
+    <div class="ref-link">
+      <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(refLink)}</span>
+      <button class="btn btn-primary btn-sm" onclick="navigator.clipboard.writeText('${escHtml(refLink)}').then(()=>showToast('Link copiado!','success','✓'))">Copiar</button>
+    </div>
+    <p class="txt3 mt8" style="font-size:11px">Código: <code style="background:var(--white);padding:2px 8px;border-radius:4px;font-family:'DM Mono',monospace">${data.ref_code}</code></p>
+  </div>
+
+  <div class="grid-3 mt24">
+    <div class="card-stat"><div class="stat-num" style="color:var(--accent)">${data.total_invited}</div><div class="stat-label">Convidados</div></div>
+    <div class="card-stat"><div class="stat-num" style="color:var(--green)">${data.total_paid}</div><div class="stat-label">Convertidos</div></div>
+    <div class="card-stat"><div class="stat-num" style="color:var(--ton)">${data.days_earned}</div><div class="stat-label">Dias Ganhos</div></div>
+  </div>
+
+  <div class="mt24">
+    <h2 style="margin-bottom:12px">Seus indicados</h2>
+    ${data.referrals.length === 0
+      ? `<div class="card" style="text-align:center;padding:40px">
+           <div style="font-size:40px;margin-bottom:12px">🔗</div>
+           <h3>Nenhum indicado ainda</h3>
+           <p class="txt3 mt8" style="font-size:13px">Compartilhe seu link e comece a ganhar dias.</p>
+         </div>`
+      : `<div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Nome</th><th>Cadastro</th><th>Status</th><th>Bônus</th></tr></thead>
+            <tbody>
+              ${data.referrals.map(r=>`<tr>
+                <td>${escHtml(r.name)}</td>
+                <td class="mono txt3" style="font-size:11px">${fmtDate(r.joined_at)}</td>
+                <td>${r.paid?'<span class="badge badge-green">✓ Pagou</span>':'<span class="badge badge-amber">Pendente</span>'}</td>
+                <td>${r.paid?`<span class="badge badge-blue">+${REF_DAYS} dias</span>`:'<span class="txt3" style="font-size:11px">—</span>'}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+         </div>`
+    }
+  </div>
+
+  <div class="card-sm mt24" style="background:var(--amber-bg);border-color:var(--amber-border)">
+    <p style="font-size:13px;color:var(--amber)"><strong>⚠ Importante:</strong> Bônus só é creditado quando o indicado pagar o primeiro mês. Cadastro sem pagamento não gera crédito.</p>
+  </div>
+  <div class="mt24"><button class="btn btn-ghost" onclick="APP.nav('/dashboard')">← Voltar</button></div>
+</div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  SETTINGS
+// ═══════════════════════════════════════════════════════════════
+async function renderSettings(app, params) {
+  if (!STATE.user) { APP.nav('/login'); return; }
+  const { user } = STATE;
+  let payments = [];
+  try { const d = await api('GET', '/api/payments/history'); payments = d.payments; } catch {}
+
+  app.innerHTML = `
+<div class="page" style="max-width:600px">
+  <div class="mt16"><h1>Configurações</h1><p class="txt2 mt4">Sua conta e assinatura.</p></div>
+
+  <div class="card mt24">
+    <h2 style="margin-bottom:20px">Perfil</h2>
+    <div class="field"><label class="label">Nome</label><input class="input" id="cfg-name" value="${escHtml(user.name||'')}" maxlength="60"></div>
+    <div class="field"><label class="label">E-mail</label><input class="input" value="${escHtml(user.email)}" disabled></div>
+    <button class="btn btn-primary btn-sm" onclick="saveProfile()">Salvar</button>
+  </div>
+
+  <div class="card mt16">
+    <h2 style="margin-bottom:20px">Alterar Senha</h2>
+    <div class="field"><label class="label">Senha atual</label><input class="input" type="password" id="cfg-pw-cur"></div>
+    <div class="field"><label class="label">Nova senha</label><input class="input" type="password" id="cfg-pw-new" minlength="8"></div>
+    <div class="field"><label class="label">Confirmar nova</label><input class="input" type="password" id="cfg-pw-new2"></div>
+    <button class="btn btn-ghost btn-sm" onclick="changePassword()">Alterar senha</button>
+  </div>
+
+  <div class="card mt16">
+    <h2 style="margin-bottom:12px">Assinatura</h2>
+    <div class="between">
+      <div>
+        <div class="gap">${user.active?`<span class="badge badge-green">✓ Ativo</span><span class="txt2" style="font-size:13px">${user.days_left} dias</span>`:'<span class="badge badge-red">Expirado</span>'}</div>
+        <p class="txt3 mt8" style="font-size:12px">1 TON/mês · Até 3 sites</p>
+      </div>
+      <button class="btn btn-ton btn-sm" onclick="openPayModal()">💎 ${user.active?'Renovar':'Assinar'}</button>
+    </div>
+    ${payments.length > 0 ? `
+    <div class="div" style="margin:16px 0"></div>
+    <h3 style="font-size:13px;margin-bottom:12px">Histórico</h3>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Data</th><th>Valor</th><th>Dias</th><th>Status</th></tr></thead>
+        <tbody>
+          ${payments.map(p=>`<tr>
+            <td class="mono txt3" style="font-size:11px">${fmtDate(p.created_at)}</td>
+            <td>${p.amount_ton} TON</td>
+            <td>+${p.days_granted}d</td>
+            <td>${p.status==='finished'||p.status==='confirmed'?'<span class="badge badge-green">✓ Pago</span>':'<span class="badge badge-amber">'+p.status+'</span>'}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>` : ''}
+  </div>
+
+  <div class="card mt16">
+    <h2 style="margin-bottom:8px">Subdomínio</h2>
+    <div class="card-sm" style="display:flex;align-items:center;gap:12px;margin-top:12px">
+      <div style="width:32px;height:32px;background:var(--green-bg);border:1px solid var(--green-border);border-radius:6px;display:flex;align-items:center;justify-content:center">✓</div>
+      <div>
+        <span class="mono txt2" style="font-size:13px">https://${escHtml(user.subdomain)}${DOMAIN}</span>
+        <div><span class="badge badge-green" style="font-size:10px;margin-top:4px">Verificado</span></div>
+      </div>
+    </div>
+    <p class="txt3 mt12" style="font-size:12px">O subdomínio é permanente.</p>
+  </div>
+
+  <div class="card mt16" style="border-color:var(--red-border)">
+    <h2 style="color:var(--red);margin-bottom:8px">Zona de Perigo</h2>
+    <p class="txt2" style="font-size:13px;margin-bottom:16px">Esta ação é irreversível.</p>
+    <button class="btn btn-red btn-sm" onclick="deleteAccount()">🗑 Deletar minha conta</button>
+  </div>
+  <div class="mt24"><button class="btn btn-ghost" onclick="APP.nav('/dashboard')">← Voltar</button></div>
+</div>
+
+<!-- Pay modal -->
+<div class="modal-overlay" id="payModal">
+  <div class="modal-box" style="max-width:480px">
+    <div class="modal-head"><div class="gap"><span>💎</span><h3>Assinar WebDrop</h3></div><button onclick="closePayModal()" class="btn btn-ghost btn-sm">✕</button></div>
+    <div class="modal-body" style="padding:24px" id="payModalContent">
+      <p class="txt2" style="font-size:13px;margin-bottom:20px">1 TON por mês via NowPayments</p>
+      <button class="btn btn-ton" style="width:100%" id="payCreateBtn" onclick="createPayment()">💎 Gerar cobrança →</button>
+    </div>
+  </div>
+</div>`;
+}
+
+async function saveProfile() {
+  const name = (document.getElementById('cfg-name').value||'').trim();
+  if (!name) { showToast('Nome inválido.','error','⚠'); return; }
+  try { await api('PUT', '/api/auth/profile', { name }); showToast('Perfil atualizado!','success','✓'); } catch(e) { showToast(e.message,'error','✗'); }
+}
+async function changePassword() {
+  const cur  = document.getElementById('cfg-pw-cur').value||'';
+  const pw   = document.getElementById('cfg-pw-new').value||'';
+  const pw2  = document.getElementById('cfg-pw-new2').value||'';
+  if (!cur||!pw||!pw2) { showToast('Preencha todos.','error','⚠'); return; }
+  if (pw!==pw2) { showToast('Senhas não coincidem.','error','⚠'); return; }
+  if (pw.length<8) { showToast('Senha muito curta.','error','⚠'); return; }
+  try { await api('PUT', '/api/auth/password', { current_password:cur, new_password:pw }); showToast('Senha alterada!','success','✓'); ['cfg-pw-cur','cfg-pw-new','cfg-pw-new2'].forEach(id=>document.getElementById(id).value=''); }
+  catch(e) { showToast(e.message,'error','✗'); }
+}
+async function deleteAccount() {
+  if (!confirm('Deletar sua conta permanentemente? Todos os sites serão apagados.')) return;
+  try { await api('DELETE', '/api/auth/account'); STATE.user=null; STATE.sites=[]; APP.nav('/'); }
+  catch(e) { showToast(e.message,'error','✗'); }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  ADMIN
+// ═══════════════════════════════════════════════════════════════
+function renderAdminLogin() {
+  return `
+<div class="page" style="max-width:380px">
+  <div class="mt64" style="text-align:center">
+    <div style="font-size:40px;margin-bottom:16px">🔒</div>
+    <h1>Admin</h1><p class="txt2 mt8">Acesso restrito.</p>
+  </div>
+  <div class="card mt24">
+    <div class="field"><label class="label">E-mail</label><input class="input" type="email" id="adm-email" autocomplete="username"></div>
+    <div class="field"><label class="label">Senha</label><input class="input" type="password" id="adm-pw" onkeydown="if(event.key==='Enter')doAdminLogin()"></div>
+    <button class="btn btn-primary" style="width:100%" onclick="doAdminLogin()">Entrar →</button>
+  </div>
+</div>`;
+}
+async function doAdminLogin() {
+  const email = (document.getElementById('adm-email').value||'').trim();
+  const pw    = document.getElementById('adm-pw').value||'';
+  try { await api('POST', '/api/admin/login', { email, password: pw }); APP.nav('/admin/dashboard'); }
+  catch(e) { showToast(e.message,'error','⚠'); }
+}
+
+async function renderAdminDash(app, params) {
+  const tab = params.get('tab') || 'users';
+  let stats, usersData, paymentsData;
+  try {
+    stats        = (await api('GET', '/api/admin/stats'));
+    usersData    = (await api('GET', '/api/admin/users'));
+    paymentsData = (await api('GET', '/api/admin/payments'));
+  } catch(e) { APP.nav('/admin'); return; }
+
+  const users    = usersData.users || [];
+  const payments = paymentsData.payments || [];
+
+  let tabContent = '';
+  if (tab === 'users') {
+    tabContent = `
+    <div class="between" style="margin-bottom:16px">
+      <h2>Usuários (${stats.totalUsers})</h2>
+      <input class="input" style="width:220px;padding:8px 12px" placeholder="Filtrar..." oninput="filterRows(this.value,'u-row')">
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Nome / Email</th><th>Subdomínio</th><th>Status</th><th>Refs</th><th>Criado</th><th>Ações</th></tr></thead>
+        <tbody>
+          ${users.map(u=>`<tr class="u-row">
+            <td><div style="font-weight:600;font-size:13px">${escHtml(u.name)}</div><div class="mono txt3" style="font-size:10px">${escHtml(u.email)}</div></td>
+            <td class="mono" style="font-size:12px">${escHtml(u.subdomain)}</td>
+            <td>${new Date(u.access_until)>new Date()?'<span class="badge badge-green">● Ativo</span>':'<span class="badge badge-red">Expirado</span>'}</td>
+            <td><span class="badge badge-blue">${u.ref_earned||0}</span></td>
+            <td class="mono txt3" style="font-size:11px">${fmtDate(u.created_at)}</td>
+            <td><div class="gap">
+              <button class="btn btn-ghost btn-xs" onclick="adminAddDays('${u.id}',7)">+7d</button>
+              <button class="btn btn-red btn-xs" onclick="adminDeleteUser('${u.id}','${escHtml(u.email)}')">🗑</button>
+            </div></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+  } else if (tab === 'payments') {
+    tabContent = `
+    <h2 style="margin-bottom:16px">Pagamentos (${payments.length})</h2>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Data</th><th>Usuário</th><th>Valor</th><th>Status</th><th>IPN</th></tr></thead>
+        <tbody>
+          ${payments.length===0?'<tr><td colspan="5" class="txt3" style="text-align:center;padding:32px">Nenhum pagamento</td></tr>':''}
+          ${payments.map(p=>`<tr>
+            <td class="mono txt3" style="font-size:11px">${fmtDate(p.created_at)}</td>
+            <td><div style="font-size:13px">${escHtml(p.users?.name||'—')}</div><div class="mono txt3" style="font-size:10px">${escHtml(p.users?.email||'')}</div></td>
+            <td>${p.amount_ton} TON</td>
+            <td>${p.status==='finished'||p.status==='confirmed'?'<span class="badge badge-green">✓ Pago</span>':'<span class="badge badge-amber">'+escHtml(p.status)+'</span>'}</td>
+            <td>${p.ipn_verified?'<span class="badge badge-green">✓</span>':'<span class="badge badge-grey">—</span>'}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+  }
+
+  app.innerHTML = `
+<div class="admin-layout">
+  <div class="admin-sidebar">
+    <div style="padding:0 20px 20px;border-bottom:1px solid var(--border)">
+      <div class="logo" style="cursor:default"><div class="logo-mark">W</div>Admin</div>
+    </div>
+    <div class="admin-nav-section">Painel</div>
+    <button class="admin-nav-item ${tab==='users'?'active':''}" onclick="APP.nav('/admin/dashboard?tab=users')">👥 Usuários <span class="badge badge-grey" style="margin-left:auto;font-size:10px">${stats.totalUsers}</span></button>
+    <button class="admin-nav-item ${tab==='payments'?'active':''}" onclick="APP.nav('/admin/dashboard?tab=payments')">💳 Pagamentos</button>
+    <div class="admin-nav-section" style="margin-top:16px">Conta</div>
+    <button class="admin-nav-item" style="color:var(--red)" onclick="doAdminLogout()">← Sair</button>
+  </div>
+  <div class="admin-main">
+    <div class="grid-4" style="margin-bottom:28px">
+      <div class="card-stat"><div class="stat-num">${stats.totalUsers}</div><div class="stat-label">Usuários</div></div>
+      <div class="card-stat"><div class="stat-num" style="color:var(--green)">${stats.activeUsers}</div><div class="stat-label">Ativos</div></div>
+      <div class="card-stat"><div class="stat-num" style="color:var(--ton)">${stats.totalPaid}</div><div class="stat-label">Pagamentos</div></div>
+      <div class="card-stat"><div class="stat-num" style="color:var(--accent)">${stats.revenue} TON</div><div class="stat-label">Receita</div></div>
+    </div>
+    ${tabContent}
+  </div>
+</div>`;
+
+  renderNav();
+  document.getElementById('nav-links').innerHTML = '<button class="btn btn-red btn-sm" onclick="doAdminLogout()">Sair do Admin</button>';
+}
+
+function filterRows(val, cls) {
+  val = val.toLowerCase();
+  document.querySelectorAll('.'+cls).forEach(r => { r.style.display = r.textContent.toLowerCase().includes(val) ? '' : 'none'; });
+}
+async function adminAddDays(id, days) {
+  try { await api('POST', `/api/admin/users/${id}/add-days`, { days }); showToast(`+${days} dias adicionados!`,'success','✓'); APP.nav('/admin/dashboard?tab=users'); }
+  catch(e) { showToast(e.message,'error','✗'); }
+}
+async function adminDeleteUser(id, email) {
+  if (!confirm('Deletar ' + email + '? IRREVERSÍVEL.')) return;
+  try { await api('DELETE', `/api/admin/users/${id}`); showToast('Usuário deletado.','amber','⚠'); APP.nav('/admin/dashboard?tab=users'); }
+  catch(e) { showToast(e.message,'error','✗'); }
+}
+async function doAdminLogout() {
+  try { await api('POST', '/api/admin/logout'); } catch {}
+  APP.nav('/admin');
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  404
+// ═══════════════════════════════════════════════════════════════
+function render404() {
+  return `<div class="page" style="text-align:center;padding-top:100px">
+    <div style="font-size:64px;margin-bottom:16px">🔍</div>
+    <h1 style="font-size:clamp(40px,7vw,80px);color:var(--accent)">404</h1>
+    <p class="txt2 mt16">Esta página não existe.</p>
+    <button class="btn btn-primary mt24" onclick="APP.nav('/')">← Voltar ao início</button>
+  </div>`;
+}
+
+// ── Toasts ─────────────────────────────────────────────────────
+function showToast(msg, type='success', icon='✓') {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = `toast toast-${type==='error'?'error':type==='amber'?'amber':'success'}`;
+  t.innerHTML = `<span>${icon}</span><span>${escHtml(msg)}</span>`;
+  c.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transition='opacity .3s'; setTimeout(()=>t.remove(),300); }, 4000);
+}
+
+// ── Boot ───────────────────────────────────────────────────────
+APP.render();
+</script>
+</body>
+</html>

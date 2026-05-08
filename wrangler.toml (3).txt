@@ -1,0 +1,12 @@
+name       = "webdrop-worker"
+main       = "worker.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+BASE_DOMAIN  = "webdrop.app"
+BACKEND_URL  = "https://webdrop-server.onrender.com"
+# WORKER_SECRET → defina via: wrangler secret put WORKER_SECRET
+
+[[routes]]
+pattern  = "*.webdrop.app/*"
+zone_name = "webdrop.app"
